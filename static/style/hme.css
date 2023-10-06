@@ -1,0 +1,45 @@
+
+.button{
+    border: solid rgba(255, 0, 0, 0.418) 2px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    transform: .4s;
+    color: black;
+}
+.button:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+    text-decoration: none;
+
+}
+.nav-link{
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.logo{
+    font-weight: bold;
+    color: black;
+    font-size: 30px;
+}
+.logo1{
+    font-weight: bold;
+    color: red;
+    font-size: 30px;
+}
+.size{
+  padding-top: 45px;
+  padding-bottom: 30px;
+}
+
+.float-start{
+    font-weight: bold;
+    color: red;
+}
+.float-end{
+    font-weight: bold;
+    color: green;
+}

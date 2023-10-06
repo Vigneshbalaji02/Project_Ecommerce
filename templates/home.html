@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'Script/bootstarp5.css'%}">
+    <link rel="stylesheet" href="{%static 'Script/bootstarp.4.css'%}">
+    <script src="{%static 'Script/Jquery.js'%}"></script>
+    <script src="{%static 'Script/POPP.js'%}"></script>
+    <script src="{%static 'Script/jsboot.js'%}"></script>  
+   <link rel="stylesheet" href="{%static 'C:\Users\KIRUTHIKA\Desktop\Project New\App\static\style\hme.css'%}">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>GamersShop | Online Shopping </title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-danger">
+      <div class="container">
+            <a class="navbar-brand" href="/home"><span class="logo">Gamers</span><span class="logo1">Shop</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#coll">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+                 <div class="collapse navbar-collapse" id="coll" > 
+                     <Ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                         <li class="nav-iteam">
+                            <a href="/home" class="nav-link"><i class="fa fa-home"></i>  Home </a>
+                        </li>
+                        <li class="nav-iteam">
+                            <a href="/collections" class="nav-link"><i class="fa fa-cubes"></i>  Collections </a>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                           <a href="#"class="nav-link" aria-current="page"> <i class="fa fa-user"></i>{{request.user}}</a>
+                           <a href="/logout"class="nav-link" aria-current="page"> <i class="fa fa-sign-out"></i> Logout </a>
+                        {% else %}
+                            <a href="/register"class="nav-link"> <i class="fa fa-user"></i>  Register </a>
+                            <a href="/login"class="nav-link"> <i class="fa fa-sign-in"></i>  Login  </a>
+                        {% endif %}
+                        <a href="/cart" class="nav-link"> <i class="fa fa-shopping-cart"></i>   Cart </a>
+                        <a href="/favviewpage" class="nav-link"> <i class="fa fa-heart"></i>   Favourite </a>
+                   </Ul>
+                </div>    
+      </div>
+    </nav>
+    <div id="Mycarousel" class="carousel slide carousel-fade" data-ride="carousel">
+        <ul class="carousel-indicators">
+          <li data-target="#Mycarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#Mycarousel" data-slide-to="1"></li>
+          <li data-target="#Mycarousel" data-slide-to="2"></li>
+          <li data-target="#Mycarousel" data-slide-to="3"></li>
+          <li data-target="#Mycarousel" data-slide-to="4"></li>
+        </ul>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{%static 'Images/1.jpg'%}" alt="First slide"width=1400px height="657px">
+          </div>
+          <div class="carousel-item">
+            <img  src="{%static 'Images/2.jpg'%}" alt="Second slide" width=1400px height="657px">
+          </div>
+          <div class="carousel-item">
+            <img src="{%static 'Images/3.jpg'%}" alt="Third slide" width=1400px height="657px">
+          </div>
+          <div class="carousel-item">
+            <img src="{%static 'Images/4.1.jpeg'%}" alt="Third slide"width=1400px height="657px">
+          </div>
+          <div class="carousel-item">
+            <img src="{%static 'Images/5.jpg'%}" alt="Third slide"width=1400px height="657px">
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#Mycarousel" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only"></span>
+        </a>
+        <a class="carousel-control-next" href="#Mycarousel" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only"></span>
+        </a>      
+    </div>
+<div class="container" style="margin-bottom: 100px;">
+    <div class="row">
+        <div class="size">
+                <h4 class="mb-3"> Summer Sales </h4>
+                <hr style="border-color: #b8bfc2;">
+            </div> 
+        {% for item in product %}          
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card my-3">
+                            <img src="{{item.Product_Image.url}}" class="card-image-top"alt="Catagory">
+                            <a href="{% url 'product_details' item.Catagory.Name item.Name %}" style="text-decoration: none;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">{{item.Name}}</h5>
+                                    <p class="card-text">
+                                    <span class="float-start"><s>Rs.{{item.Original_price | stringformat:'d'}}</span></s>
+                                    <span class="float-end">Rs.{{item.Selling_price | stringformat:'d' }}</span>
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+    </div>
+</div>
+
+
+    <footer class="text-center lg-start bg-dark text-white">
+      <section class="container d-flex justify-content-center justify-content-lg-between p-4">
+          <div class=" me-5 d-none d-lg-block">
+              <span> Get connected with us on social network: </span>
+          </div>
+              <div>
+                  <a href="https://www.facebook.com/fu.vicky.39" target="_blank" class="me-4 text-reset"><i class="fa fa-facebook"></i></a>
+                  <a href="https://twitter.com/vigneshb789?t=8Cf4YBFCmVNMwwfJxg2zOA&s=09"target="_blank"  class="me-4 text-reset"><i class="fa fa-twitter"></i></a>
+                  <a href="https://instagram.com/_vignesh_vj?igshid=OGQ5ZDc2ODk2ZA==" target="_blank" class="me-4 text-reset"><i class="fa fa-instagram"></i></a>
+                  <a href="https://www.linkedin.com/login"target="_blank"  class="me-4 text-reset"><i class="fa fa-linkdin"></i></a>
+                  <a href="https://github.com/Vigneshbalaji02" target="_blank" class="me-4 text-reset"><i class="fa fa-github"></i></a>
+              </div>
+      </section>
+          <section class="">
+              <div class="container text-center text-md-start mt-5">
+                  <div class="row mt-3">
+                      <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                          <h6 class="text-uppercase fw-bold mb-4"><i class="fa fa-cart-plus"></i> GamersShop</h6>
+                      </div>
+                          <div class="col-md-4 col-lg-3 col-xl-2 mx-auto mb-md-0 mb-4">
+                              <h6 class="text-uppercase fw-bold mb-4"> Contact Us:</h6>
+                              <p><i class="fa fa-home">  Vignesh Balaji</i></p>
+                              <p><i class="fa fa-envelope"> vigesh@gmail.com</i></p>
+                              <p><i class="fa fa-phone">  +91 7904283304</i></p>
+                          </div>
+                  </div>
+              </div>
+          </section>
+              <div class="text-center p-4">
+                  &copy; 2023 Copyright <a class="text-reset fw-bold" href="/home">GamersShop.com</a>
+              </div>
+  </footer>
+</body>
+</html>
+

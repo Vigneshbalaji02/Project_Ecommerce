@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'Script/bootstarp5.css'%}">
+    <link rel="stylesheet" href="{%static 'Script/bootstarp.4.css'%}">
+    <script src="{%static 'Script/Jquery.js'%}"></script>
+    <script src="{%static 'Script/POPP.js'%}"></script>
+    <script src="{%static 'Script/jsboot.js'%}"></script>  
+   <link rel="stylesheet" href="{%static 'C:\Users\KIRUTHIKA\Desktop\Project New\App\static\style\productsdetails.css'%}">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>GamersShop | Online Shopping </title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-danger">
+      <div class="container">
+            <a class="navbar-brand" href="/home"><span class="logo">Gamers</span><span class="logo1">Shop</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#coll">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+                 <div class="collapse navbar-collapse" id="coll" > 
+                     <Ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                         <li class="nav-iteam">
+                            <a href="/home" class="nav-link"><i class="fa fa-home"></i>  Home </a>
+                        </li>
+                        <li class="nav-iteam">
+                            <a href="/collections" class="nav-link"><i class="fa fa-cubes"></i>  Collections </a>
+                        </li>
+                        {% if request.user.is_authenticated %}
+                           <a href="#"class="nav-link" aria-current="page"> <i class="fa fa-user"></i>{{request.user}}</a>
+                           <a href="/logout"class="nav-link" aria-current="page"> <i class="fa fa-sign-out"></i> Logout </a>
+                        {% else %}
+                            <a href="/register"class="nav-link"> <i class="fa fa-user"></i>  Register </a>
+                            <a href="/login"class="nav-link"> <i class="fa fa-sign-in"></i>  Login  </a>
+                        {% endif %}
+                        <a href="/cart" class="nav-link"> <i class="fa fa-shopping-cart"></i>   Cart </a>
+                        <a href="/favviewpage" class="nav-link"> <i class="fa fa-heart"></i>   Favourite </a>
+                    </Ul>
+                </div>    
+      </div>
+    </nav>
+
+
+<section class="bg-light py-3 my-4" style="min-height: 500px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-3"> {{product}} Details</h4>
+                <hr style="border-color: #b8bfc2;">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/home"> Home </a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'collections' product.Catagory.Name %}"> Collection </a></li>
+                            <li class="breadcrumb-item active"><a href="#"> {{product}} </a></li>
+                        </ol>
+                    </nav>
+            </div>
+            <div class="col-4 my-3 pic-box">
+                {% if product.Trending %}
+                <div class="Hot"><i class="fa fa-fire"></i> Tranding</div>
+                {% endif %}
+                <img src="{{product.Product_Image.url}}" class="card-image-top" alt="{{product}}" style="width: 330px; height: 260px;">
+            </div>
+            <div class="col-8 my-3">
+                <h5 class="text-success"> {{product}}</h5>
+                <P> {{product.Seller}}</P>
+                <p>{{product.Description}}</p>
+                <h6 class="my-2">Current Price: <s>RS.{{product.Original_price| stringformat:'d'}}</s></h6>
+                <h6 class="my-2">Offer Price: RS.{{product.Selling_price| stringformat:'d'}}</h6>
+                <div class="my-4">
+                    {% if product.Quantity > 0 %}
+                    <input type="hidden" value="{{product.id}}" id="pid">
+                
+                        <p>
+                            <div class="input-group" style="width: 150px;">
+                                <button class="input-group-text bg-danger text-light" id="btnMinus"><i class="fa fa-minus"></i></button>
+                                 <input type="text" name="qty" id="txQty" value="1" class="form-control text-center">
+                                <button class="input-group-text bg-danger text-light" id="btnPlus"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </p>
+                     <button class="btn btn-primary" id="btnCart"><i class="fa fa-shopping-cart"></i> Add to cart </button>
+                    {% else %}
+                    <button class="btn btn-secondary"><i class="fa fa-minus"></i> Out of stock </button>
+                    {% endif %}
+                    <button class="btn btn-danger" id="btnfav"><i class="fa fa-heart"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded",function(event){
+        const btnPlus=document.getElementById("btnPlus");
+        const btnMinus=document.getElementById("btnMinus");
+        const txQty=document.getElementById("txQty");
+        const pid=document.getElementById("pid");
+        const btnCart=document.getElementById("btnCart");
+        const btnfav=document.getElementById("btnfav");
+
+    btnPlus.addEventListener("click", function(){
+        let qty=parseInt(txQty.value,10);
+        qty=isNaN(qty)?0:qty;
+        if(qty<10){
+            qty++;
+            txQty.value=qty;
+        }
+        });
+        btnMinus.addEventListener("click", function(){
+        let qty=parseInt(txQty.value,10);
+        qty=isNaN(qty)?0:qty;
+        if(qty>1){
+            qty--;
+            txQty.value=qty;
+        }
+        });
+        
+        btnCart.addEventListener("click", function(){
+        let qty=parseInt(txQty.value,10);
+        qty=isNaN(qty)?0:qty;
+        if(qty>0){
+            let postObj={
+                'Product_qty':qty,
+                'pid':pid.value,
+            }
+            console.log(postObj);
+            fetch("/addtocart",{
+                method:"POST",
+                credentials:'same-origin',
+            headers:{
+                'Accept':'application/json',
+                'X-Requested-With':'XMLHttpRequest',
+                'X-CSRFToken':'{{ csrf_token}}',
+            },
+            body:JSON.stringify(postObj)
+            }).then(response=>{
+                return response.json();
+            }).then(data=>{
+                console.log(data);
+                alert(data['status']);
+            })
+        }
+        else{
+            alert("Please Enter The Quantity");
+        }
+        });
+    
+    });
+
+    btnfav.addEventListener("click", function(){
+                
+        let postObj={
+                'pid':pid.value,
+            }
+            console.log(postObj);
+            fetch("/fav",{
+                method:"POST",
+                credentials:'same-origin',
+            headers:{
+                'Accept':'application/json',
+                'X-Requested-With':'XMLHttpRequest',
+                'X-CSRFToken':'{{ csrf_token}}',
+            },
+            body:JSON.stringify(postObj)
+            }).then(response=>{
+                return response.json();
+            }).then(data=>{
+                console.log(data);
+                alert(data['status']);
+            })
+    });
+</script>
+<footer class="text-center lg-start bg-dark text-white">
+    <section class="container d-flex justify-content-center justify-content-lg-between p-4">
+        <div class=" me-5 d-none d-lg-block">
+            <span> Get connected with us on social network: </span>
+        </div>
+            <div>
+                <a href="https://www.facebook.com/fu.vicky.39" target="_blank" class="me-4 text-reset"><i class="fa fa-facebook"></i></a>
+                <a href="https://twitter.com/vigneshb789?t=8Cf4YBFCmVNMwwfJxg2zOA&s=09"target="_blank"  class="me-4 text-reset"><i class="fa fa-twitter"></i></a>
+                <a href="https://instagram.com/_vignesh_vj?igshid=OGQ5ZDc2ODk2ZA==" target="_blank" class="me-4 text-reset"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/login"target="_blank"  class="me-4 text-reset"><i class="fa fa-linkdin"></i></a>
+                <a href="https://github.com/Vigneshbalaji02" target="_blank" class="me-4 text-reset"><i class="fa fa-github"></i></a>
+            </div>
+    </section>
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <div class="row mt-3">
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4"><i class="fa fa-cart-plus"></i> GamersShop</h6>
+                    </div>
+                        <div class="col-md-4 col-lg-3 col-xl-2 mx-auto mb-md-0 mb-4">
+                            <h6 class="text-uppercase fw-bold mb-4"> Contact Us:</h6>
+                            <p><i class="fa fa-home">  Vignesh Balaji</i></p>
+                            <p><i class="fa fa-envelope"> vigesh@gmail.com</i></p>
+                            <p><i class="fa fa-phone">  +91 7904283304</i></p>
+                        </div>
+                </div>
+            </div>
+        </section>
+            <div class="text-center p-4">
+                &copy; 2023 Copyright <a class="text-reset fw-bold" href="/home">GamersShop.com</a>
+            </div>
+</footer>
+
+</body>
+</html>
+
